@@ -647,7 +647,9 @@ function civicrm_entity_views_query_alter(ViewExecutable $view, QueryPluginBase 
   $multilingual = \CRM_Core_I18n::isMultilingual();
 
   if ($multilingual) {
-    $locales = \CRM_Core_I18n::getMultilingual();
+    // @codingStandardsIgnoreStart
+    global $dbLocale;
+    // @codingStandardsIgnoreEnd
     $columns = CRM_Core_I18n_SchemaStructure::columns();
     $affectedColumns = [];
     foreach ($columns as $table => $hash) {
@@ -668,9 +670,7 @@ function civicrm_entity_views_query_alter(ViewExecutable $view, QueryPluginBase 
           if (!is_object($condition['field'])) {
             foreach ($affectedColumns as $aff_column) {
               if (strpos($aff_column, $condition['field']) !== FALSE) {
-                foreach ($locales as $locale) {
-                  $condition['field'] = str_replace($aff_column, $aff_column . '_' . $locale, $condition['field']);
-                }
+                $condition['field'] = str_replace($aff_column, $aff_column . $dbLocale, $condition['field']);
               }
             }
           }
@@ -681,9 +681,7 @@ function civicrm_entity_views_query_alter(ViewExecutable $view, QueryPluginBase 
     if (!empty($query->fields)) {
       foreach ($query->fields as &$field) {
         if (array_key_exists($field['table'], $columns) && array_key_exists($field['field'], $columns[$field['table']])) {
-          foreach ($locales as $locale) {
-            $field['field'] .= '_' . $locale;
-          }
+          $field['field'] .= $dbLocale;
         }
       }
     }
