@@ -3,7 +3,7 @@
 /**
  * Entity Controller for CiviCRM entities
  */
-class CivicrmEntityController extends EntityAPIController {
+class CivicrmEntityController extends EntityPlusController {
 
   public function __construct($entityType) {
     parent::__construct($entityType);

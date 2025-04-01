@@ -15,14 +15,14 @@ class CiviCRMEntityDefaultViewsController extends EntityDefaultViewsController {
       $table = $this->info['base table'];
       // Define the base group of this table. Fields that don't
       // have a group defined will go into this field by default.
-      $data[$table]['table']['group'] = drupal_ucfirst($this->info['label']);
+      $data[$table]['table']['group'] = backdrop_ucfirst($this->info['label']);
       $data[$table]['table']['entity type'] = $this->type;
 
       // If the plural label isn't available, use the regular label.
       $label = isset($this->info['plural label']) ? $this->info['plural label'] : $this->info['label'];
       $data[$table]['table']['base'] = array(
         'field' => $this->info['entity keys']['id'],
-        'title' => drupal_ucfirst($label),
+        'title' => backdrop_ucfirst($label),
         'help' => isset($this->info['description']) ? $this->info['description'] : '',
       );
       $data[$table]['table']['entity type'] = $this->type;
@@ -83,8 +83,8 @@ class CiviCRMEntityDefaultViewsController extends EntityDefaultViewsController {
     if (($info = entity_get_info($type)) && !empty($info['base table'])) {
 
       // Prepare reversed relationship data.
-      $label_lowercase = drupal_strtolower($this->info['label'][0]) . drupal_substr($this->info['label'], 1);
-      $property_label_lowercase = drupal_strtolower($property_info['label'][0]) . drupal_substr($property_info['label'], 1);
+      $label_lowercase = backdrop_strtolower($this->info['label'][0]) . backdrop_substr($this->info['label'], 1);
+      $property_label_lowercase = backdrop_strtolower($property_info['label'][0]) . backdrop_substr($property_info['label'], 1);
 
       // We name the field of the first reverse-relationship just with the
       // base table to be backward compatible, for subsequents relationships we
@@ -106,7 +106,7 @@ class CiviCRMEntityDefaultViewsController extends EntityDefaultViewsController {
       );
 
       $return['relationship'] = array(
-        'label' => drupal_ucfirst($info['label']),
+        'label' => backdrop_ucfirst($info['label']),
         'handler' => $this->getRelationshipHandlerClass($type, $this->type),
         'base' => $info['base table'],
         'base field' => isset($info['entity keys']['name']) ? $info['entity keys']['name'] : $info['entity keys']['id'],
