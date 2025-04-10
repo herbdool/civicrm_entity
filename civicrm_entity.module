@@ -9,6 +9,17 @@ module_load_include('inc', 'civicrm_entity', 'civicrm_entity.ds');
 module_load_include('inc', 'civicrm_entity', 'civicrm_entity.default_form');
 
 /**
+ * Implements hook_config_info().
+ */
+function civicrm_entity_config_info() {
+  $prefixes['civicrm_entity.settings'] = array(
+    'label' => t('CiviCRM Entity settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+/**
  * Implements hook_menu().
  *
  * @return array
@@ -187,7 +198,7 @@ function civicrm_entity_theme() {
  * @return mixed
  */
 function civicrm_entity_loader_load($id, $entity_type) {
-  $entity = entity_load_single($entity_type, $id);
+  $entity = entity_load($entity_type, $id);
   if ($entity) {
     return $entity;
   }
@@ -499,28 +510,11 @@ function civicrm_entity_get_supported_entity_info($entity_type = NULL) {
   $civicrm_entity_info = civicrm_entity_supported_entities_info();
 
   if (civicrm_initialize()) {
-    $codeVersion = explode('.', CRM_Utils_System::version());
-    // if db.ver < code.ver, time to upgrade
-    if (version_compare($codeVersion[0] . '.' . $codeVersion[1], 5.28) >= 0) {
-      CRM_Utils_Hook::singleton()->invoke(['info'], $civicrm_entity_info,
-        CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-        CRM_Core_DAO::$_nullObject,
-        'civicrm_entity_supported_info'
-      );
-    }
-    elseif (version_compare($codeVersion[0] . '.' . $codeVersion[1], 4.5) >= 0) {
-      CRM_Utils_Hook::singleton()->invoke(1, $civicrm_entity_info,
-        CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-        CRM_Core_DAO::$_nullObject,
-        'civicrm_entity_supported_info'
-      );
-    }
-    else {
-      CRM_Utils_Hook::singleton()->invoke(1, $civicrm_entity_info,
-        CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-        'civicrm_entity_supported_info'
-      );
-    }
+    CRM_Utils_Hook::singleton()->invoke(['info'], $civicrm_entity_info,
+      CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
+      CRM_Core_DAO::$_nullObject,
+      'civicrm_entity_supported_info'
+    );
   }
 
   // Check if API finds each entity type.
@@ -2040,7 +2034,6 @@ function _civicrm_entity_available_entities() {
   return $whitelist;
 }
 
-
 /**
  * Whitelist of enabled entities. We don't have a compelling reason for not including all entities
  * but some entities are fairly non-standard and of course the rule hook would instantiate rules
@@ -2054,7 +2047,10 @@ function _civicrm_entity_enabled_entities() {
   $available_entities = _civicrm_entity_available_entities();
   $available_entities_option_set = _civicrm_entity_available_entities_get_option_set($available_entities);
 
-  $selected_entities = variable_get('civicrm_entity_admin_enabled_entities', $available_entities_option_set);
+  $selected_entities = config_get('civicrm_entity', 'admin_enabled_entities');
+  if ($selected_entities == NULL) {
+    $selected_entities = $available_entities_option_set;
+  }
 
   $enabled_entities = array();
   foreach ($available_entities as $entity_type => $api_entity) {
@@ -2093,28 +2089,11 @@ function _civicrm_enabled_entity_alter_whitelist(&$whitelist) {
   if (!civicrm_initialize()) {
     return;
   }
-  $codeVersion = explode('.', CRM_Utils_System::version());
-  // if db.ver < code.ver, time to upgrade
-  if (version_compare($codeVersion[0] . '.' . $codeVersion[1], 5.28) >= 0) {
-    return CRM_Utils_Hook::singleton()->invoke(['entities'], $whitelist,
-      CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-      CRM_Core_DAO::$_nullObject,
-      'civicrm_alter_backdrop_entities'
-    );
-  }
-  elseif (version_compare($codeVersion[0] . '.' . $codeVersion[1], 4.5) >= 0) {
-    return CRM_Utils_Hook::singleton()->invoke(1, $whitelist,
-      CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-      CRM_Core_DAO::$_nullObject,
-      'civicrm_alter_backdrop_entities'
-    );
-  }
-  else {
-    return CRM_Utils_Hook::singleton()->invoke(1, $whitelist,
-      CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-      'civicrm_alter_backdrop_entities'
-    );
-  }
+  return CRM_Utils_Hook::singleton()->invoke(['entities'], $whitelist,
+    CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
+    CRM_Core_DAO::$_nullObject,
+    'civicrm_alter_backdrop_entities'
+  );
 }
 
 /**
@@ -2149,28 +2128,11 @@ function _civicrm_enabled_entity_alter_labels(&$labels) {
   if (!civicrm_initialize()) {
     return;
   }
-  $codeVersion = explode('.', CRM_Utils_System::version());
-  // if db.ver < code.ver, time to upgrade
-  if (version_compare($codeVersion[0] . '.' . $codeVersion[1], 5.28) >= 0) {
-    return CRM_Utils_Hook::singleton()->invoke(['labels'], $labels,
-      CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-      CRM_Core_DAO::$_nullObject,
-      'civicrm_alter_backdrop_entity_labels'
-    );
-  }
-  elseif (version_compare($codeVersion[0] . '.' . $codeVersion[1], 4.5) >= 0) {
-    return CRM_Utils_Hook::singleton()->invoke(1, $labels,
-      CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-      CRM_Core_DAO::$_nullObject,
-      'civicrm_alter_backdrop_entity_labels'
-    );
-  }
-  else {
-    return CRM_Utils_Hook::singleton()->invoke(1, $labels,
-      CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
-      'civicrm_alter_backdrop_entity_labels'
-    );
-  }
+  return CRM_Utils_Hook::singleton()->invoke(['labels'], $labels,
+    CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject, CRM_Core_DAO::$_nullObject,
+    CRM_Core_DAO::$_nullObject,
+    'civicrm_alter_backdrop_entity_labels'
+  );
 }
 
 /**
@@ -2796,7 +2758,7 @@ function _civicrm_entity_get_title($field_specs, $entity_type = '') {
  */
 function civicrm_entity_civicrm_contact_label_callback($entity, $entity_type) {
   $label = isset($entity->display_name) ? $entity->display_name : '';
-  $contact_label_setting = variable_get('civicrm_entity_contact_label_format', 'legacy');
+  $contact_label_setting = config_get('civicrm_entity.settings', 'contact_label_format');
   if ($contact_label_setting == 'legacy') {
     // backdrop_alter('civicrm_entity_contact_label', $label, $entity);
     if (isset($entity->email) && !empty($entity->email)) {
@@ -2865,7 +2827,7 @@ function civicrm_entity_metadata_civicrm_entity_get_properties($data, $options, 
     ));
     return (object) $entity['values'][0];*/
 
-    return entity_load_single('civicrm_' . $info['property_info']['entity'], $data->{$info['property_info']['field']});
+    return entity_load('civicrm_' . $info['property_info']['entity'], $data->{$info['property_info']['field']});
   }
 }
 
@@ -2926,7 +2888,7 @@ function civicrm_entity_contact_is_in_group($contact, $group_id) {
     );
     $get_result = civicrm_api3('GroupContact', 'Get', $params);
     if(!empty($get_result['count'])) {
-      $group = entity_load_single('civicrm_group', $group_id);
+      $group = entity_load('civicrm_group', $group_id);
       return $group;
     }
   }
@@ -3525,14 +3487,14 @@ function civicrm_entity_civicrm_pre($op, $objectName, $id, &$params) {
         if (!empty($api_results['values'])) {
           foreach ($api_results as $delta => $result) {
             if ($result['tag_id'] == $id) {
-              $entity = entity_load_single($entity_type, $result['id']);
+              $entity = entity_load($entity_type, $result['id']);
               break;
             }
           }
         }
       }
       else {
-        $entity = entity_load_single($entity_type, $id);
+        $entity = entity_load($entity_type, $id);
       }
       if (!empty($entity)) {
         field_attach_delete($entity_type, $entity);
@@ -3630,7 +3592,7 @@ function civicrm_entity_civicrm_post($op, $object_name, $object_id, &$object_ref
     if ($event_name) {
       //this addition here causes a custom field value to be saved every time, duplicates and empty values can be made
       /*if(isset($object_ref->id)){
-        $entity = entity_load_single('civicrm_' . $entity_name, $object_ref->id);
+        $entity = entity_load('civicrm_' . $entity_name, $object_ref->id);
       }*/
       rules_invoke_event($event_name, $object_ref);
       //rules_invoke_event($event_name, $entity);

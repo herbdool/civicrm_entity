@@ -10,14 +10,12 @@
  *
  */
 function civicrm_entity_uninstall() {
-  drupal_load('module', 'civicrm_entity');
+  backdrop_load('module', 'civicrm_entity');
   $civicrm_entity_info = civicrm_entity_get_supported_entity_info();
   foreach ($civicrm_entity_info as $entity_type => $info) {
     field_attach_delete_bundle($entity_type, $entity_type);
   }
-  variable_del('civicrm_entity_admin_enabled_entities');
 }
-
 
 /**
  * Implements hook_enable().
@@ -31,29 +29,23 @@ function civicrm_entity_enable() {
 }
 
 /**
- * Blank hook_update_N() to help Drupal notice relocated files in 7.x-2.x.
+ * Implements hook_update_last_removed().
  */
-function civicrm_entity_update_7200() {
-  // This space intentionally left blank.
+function civicrm_entity_update_last_removed() {
+  return 7202;
 }
 
 /**
- * Flush all caches to help Drupal notice relocated files, additional entities, and updated metadata.
+ * Move settings from variables to config.
  */
-function civicrm_entity_update_7201() {
-  drupal_flush_all_caches();
-}
+function civicrm_entity_update_1000() {
+  // Migrate variables to config.
+  $config = config('civicrm_entity.settings');
+  $config->set('admin_enabled_entities', update_variable_get('civicrm_entity_admin_enabled_entities', array()));
+  $config->set('contact_label_format', update_variable_get('civicrm_entity_contact_label_format', 'legacy'));
+  $config->save();
 
-
-/**
- * Create enabled entities variable
- */
-function civicrm_entity_update_7202() {
-  drupal_load('module', 'civicrm_entity');
-  $available_entities = _civicrm_entity_available_entities();
-  $settings = [];
-  foreach ($available_entities as $drupal_entity_type => $civicrm_api_entity) {
-    $settings[$drupal_entity_type] = $drupal_entity_type;
-  }
-  variable_set('civicrm_entity_admin_enabled_entities', $settings);
+  // Delete variables.
+  update_variable_del('civicrm_entity_admin_enabled_entities');
+  update_variable_del('civicrm_entity_contact_label_format');
 }
