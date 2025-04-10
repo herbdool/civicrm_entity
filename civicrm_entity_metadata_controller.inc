@@ -36,7 +36,7 @@ function civicrm_entity_metadata_convert_schema($table) {
   $schema = civicrm_entity_get_schema($table);
   $properties = array();
   foreach ($schema['fields'] as $name => $info) {
-    if ($type = _entity_metadata_convert_schema_type($info['type'])) {
+    if ($type = _entity_plus_metadata_convert_schema_type($info['type'])) {
       $properties[$name] = array(
         'type' => $type,
         'label' => backdrop_ucfirst($name),

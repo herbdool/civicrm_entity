@@ -54,7 +54,7 @@ class CivicrmEntityController extends EntityPlusController {
     $passed_ids = !empty($ids) && !is_null(reset($ids)) ? array_flip((array) $ids) : FALSE;
     // Try to load entities from the static cache, if the entity type supports
     // static caching.
-    if ($this->cache && !$revision_id) {
+    if (!$revision_id) {
       $entities += $this->cacheGet($ids, $conditions);
       // If any entities were loaded, remove them from the ids still to load.
       if ($passed_ids) {
@@ -95,11 +95,9 @@ class CivicrmEntityController extends EntityPlusController {
       $entities += $queried_entities;
     }
 
-    if ($this->cache) {
-      // Add entities to the cache if we are not loading a revision.
-      if (!empty($queried_entities) && !$revision_id) {
-        $this->cacheSet($queried_entities);
-      }
+    // Add entities to the cache if we are not loading a revision.
+    if (!empty($queried_entities) && !$revision_id) {
+      $this->cacheSet($queried_entities);
     }
 
     // Ensure that the returned array is ordered the same as the original
@@ -127,7 +125,7 @@ class CivicrmEntityController extends EntityPlusController {
    * @return object
    * @throws Exception
    */
-  public function save($entity, DatabaseTransaction $transaction = NULL) {
+  public function save($entity, ?DatabaseTransaction $transaction = NULL) {
     if (!civicrm_initialize()) {
       throw new Exception('civicrm inaccessible');
     }
@@ -228,12 +226,12 @@ class CivicrmEntityController extends EntityPlusController {
     }
   }
 
-  public function delete($ids, DatabaseTransaction $transaction = NULL) {
+  public function delete($ids, ?DatabaseTransaction $transaction = NULL) {
     if (!civicrm_initialize()) {
       throw new Exception('civicrm inaccessible');
     }
 
-    $entities = entity_load($this->entityType, $ids);
+    $entities = entity_load_multiple($this->entityType, $ids);
     if(count($entities)) {
       foreach ($ids as $id) {
         $params['version'] = 3;
@@ -347,7 +345,7 @@ class CivicrmEntityController extends EntityPlusController {
         }
       }*/
     }
-    // create the Drupal Entities
+    // create the Backdrop Entities
     if (count($new_civicrm_entities)) {
       foreach ($new_civicrm_entities as $id => $civicrm_entity) {
         // @TODO improve this casting.

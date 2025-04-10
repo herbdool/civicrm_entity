@@ -3,7 +3,7 @@
 /**
  * @TODO Document this class.
  */
-class CiviCRMEntityDefaultViewsController extends EntityDefaultViewsController {
+class CiviCRMEntityDefaultViewsController extends EntityPlusDefaultViewsController {
 
   /**
    * Defines the result for hook_views_data().
@@ -44,7 +44,7 @@ class CiviCRMEntityDefaultViewsController extends EntityDefaultViewsController {
       return array();
     }
     $schema = civicrm_entity_get_schema($this->info['base table']);
-    $properties = entity_get_property_info($this->type) + array('properties' => array());
+    $properties = entity_plus_get_property_info($this->type) + array('properties' => array());
     $data = array();
     // We will take out the reliance on other schema related checks
     // here, ideally we would 'read' getfields output to determine if

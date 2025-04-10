@@ -1,6 +1,6 @@
 <?php
 
-class CivicrmEntityUIController extends EntityContentUIController {
+class CivicrmEntityUIController extends EntityDefaultUIController {
 
   public $overviewPagerLimit = 25;
 

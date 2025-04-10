@@ -494,7 +494,7 @@ function civicrm_entity_entity_info() {
  * @return array
  */
 function civicrm_entity_uri_callback($entity) {
-  $uri['path'] = str_replace('_', '-', $entity->entityType()) . '/' . $entity->id;
+  $uri['path'] = str_replace('_', '-', $entity->entityType()) . '/' . $entity->id();
   return $uri;
 }
 

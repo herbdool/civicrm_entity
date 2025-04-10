@@ -15,7 +15,10 @@ class CivicrmEntity extends Entity {
       throw new Exception('Cannot create an instance of Entity without a specified entity type.');
     }
     $this->entityType = $entityType;
-    $this->setUp();
+    // Might be from EntityBackdropWrapper::setUp().
+    // Not sure if it's still needed.
+    //$this->setUp();
+
     // Set initial values.
     foreach ($values as $key => $value) {
       // this is a bit of a hack around the fact we are casting to this to construct it
@@ -37,14 +40,15 @@ class CivicrmEntity extends Entity {
    * {@inheritdoc}
    */
   public function entityType() {
-    return 'civicrm_entity';
+    return $this->entityType;
   }
 
   /**
    * {@inheritdoc}
    */
   public function label() {
-    return $this->title;
+    // @todo each civicrm type has its own label key and also can be altered.
+    return $this->id;
   }
 
   /**

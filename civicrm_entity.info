@@ -2,6 +2,7 @@ name = CiviCRM Entities
 description = "Expose CiviCRM entities as Backdrop entities. Provides Rules integration, native Backdrop forms, and more."
 dependencies[] = civicrm
 dependencies[] = entity_plus
+dependencies[] = entity_ui
 package = CiviCRM Entity
 backdrop = 1.x
 type = module
