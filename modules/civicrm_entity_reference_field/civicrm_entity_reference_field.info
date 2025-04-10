@@ -2,5 +2,5 @@ name = CiviCRM Entity Reference Field
 description = "Provides CiviCRM entity reference field type. A "remote" entity reference field for CiviCRM for accessing related entities from host entities. For example, reference all addresses for a contact."
 dependencies[] = civicrm_entity_inline
 package = CiviCRM Entity
-core = 7.x
-version = 1.0-beta1
+backdrop = 1.x
+type = module

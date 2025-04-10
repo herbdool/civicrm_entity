@@ -27,18 +27,32 @@ class CivicrmEntity extends Entity {
   }
 
   /**
-   * Please document this function.
+   * {@inheritdoc}
    */
-  protected function defaultLabel() {
+  public function id() {
+    return isset($this->id) ? $this->id : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function entityType() {
+    return 'civicrm_entity';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function label() {
     return $this->title;
   }
 
   /**
-   * Please document this function.
+   * {@inheritdoc}
    */
-  protected function defaultUri() {
+  public function uri() {
     return array(
-      'path' => 'task/' . $this->identifier(),
+      'path' => 'task/' . $this->id(),
     );
   }
 }

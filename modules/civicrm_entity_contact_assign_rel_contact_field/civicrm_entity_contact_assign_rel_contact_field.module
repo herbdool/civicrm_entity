@@ -94,7 +94,7 @@ function civicrm_entity_contact_assign_rel_contact_field_field_settings_form($fi
         $relationship_types[$id] = $relationship_type['description'];
       }
     }
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     $relationship_types = array();
   }
 
@@ -108,7 +108,7 @@ function civicrm_entity_contact_assign_rel_contact_field_field_settings_form($fi
       $contact_types[$contact_type['label']] = $contact_type['label'];
     }*/
     $contact_types['Organization'] = 'Organization';
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     $contact_types = array();
   }
 
@@ -211,7 +211,7 @@ function _civicrm_entity_contact_assign_rel_contact_field_get_subtypes($contact_
     foreach ($result['values'] as $id => $subtype) {
       $contact_subtypes[$subtype['label']] = $subtype['label'];
     }
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     $contact_subtypes = array();
   }
   return $contact_subtypes;
@@ -237,7 +237,7 @@ function _civicrm_entity_contact_assign_rel_contact_field_get_contacts($contact_
         $contacts[$id] = $contact['display_name'];
       }
     }
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
 
   }
   return $contacts;
@@ -275,7 +275,7 @@ function civicrm_entity_contact_assign_rel_contact_field_field_load($entity_type
           else {
             $items[$entity_id][0]['contacts'][$contact_b_id] = 0;
           }
-        } catch (CiviCRM_API3_Exception $e) {
+        } catch (CRM_Core_Exception $e) {
           continue;
         }
       }
@@ -513,7 +513,7 @@ function civicrm_entity_contact_assign_rel_contact_field_field_formatter_view($e
                 'id' => $contact_b_id,
               ));
 
-            } catch (CiviCRM_API3_Exception $e) {
+            } catch (CRM_Core_Exception $e) {
               continue;
             }
             $relationship_id = $relationship_result;
@@ -617,7 +617,7 @@ function _civicrm_entity_contact_assign_rel_contact_field_get_field_settings_con
         'id' => $contact_id,
       ));
       $contacts[$id] = $result;
-    } catch (CiviCRM_API3_Exception $e) {
+    } catch (CRM_Core_Exception $e) {
       continue;
     }
   }
@@ -641,7 +641,7 @@ function _civicrm_entity_contact_assign_rel_contact_field_contact_has_relationsh
       'relationship_type_id' => $relationship_type_id,
       'is_active' => 1,
     ));
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     return FALSE;
   }
   if ($result['count']) {
@@ -670,7 +670,7 @@ function _civicrm_entity_contact_assign_rel_contact_field_add_contact_relationsh
       'is_active' => 1,
       'start_date' => $start_date,
     ));
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
 
   }
 }
@@ -704,7 +704,7 @@ function _civicrm_entity_contact_assign_rel_contact_field_remove_contact_relatio
     }
 
     $result = civicrm_api3('Relationship', 'create', $params);
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
 
   }
 }

@@ -3,7 +3,7 @@
 function civicrm_entity_form($form, &$form_state, $entity, $op, $entity_type) {
   if ($op == 'edit' || $op == 'delete') {
     if (!is_object($entity)) {
-      drupal_set_title(t('No ' . $entity_type . ' with id:' . $entity));
+      backdrop_set_title(t('No ' . $entity_type . ' with id:' . $entity));
       return $form;
     }
     $form_state['entity'] = $entity;
@@ -249,7 +249,7 @@ function civicrm_entity_form($form, &$form_state, $entity, $op, $entity_type) {
           }
 
         } // end if isset widget
-      } // end else not a drupal field
+      } // end else not a backdrop field
     } // end foreach
 
     $form['actions'] = array(
@@ -313,7 +313,7 @@ function civicrm_entity_form($form, &$form_state, $entity, $op, $entity_type) {
     $title = 'Delete ' . ucwords(str_replace("_", " ", $entity_type)) . ": " . entity_label($entity_type, $entity) . " (id:" . $entity->id . ")";;
   }
   $title = str_replace("Civicrm", "CiviCRM", $title);
-  drupal_set_title($title);
+  backdrop_set_title($title);
   return $form;
 }
 
@@ -537,7 +537,7 @@ function civicrm_entity_form_submit(&$form, &$form_state) {
     '%label' => entity_label($entity_type, $entity),
   );
 
-  $destination = drupal_get_destination();
+  $destination = backdrop_get_destination();
   $request_path = request_path();
   if (isset($destination['destination']) && $destination['destination'] != '' && $destination['destination'] != $request_path) {
     $form_state['redirect'] = $destination['destination'];
@@ -545,8 +545,8 @@ function civicrm_entity_form_submit(&$form, &$form_state) {
   else {
     $form_state['redirect'] = str_replace('_', '-', $entity_type) . '/' . $entity->id;
   }
-  drupal_set_message(t('Drupal fields and %label properties have been updated.', $t_args));
-  drupal_redirect_form($form_state);
+  backdrop_set_message(t('Drupal fields and %label properties have been updated.', $t_args));
+  backdrop_redirect_form($form_state);
 }
 
 /**
@@ -565,7 +565,7 @@ function civicrm_entity_delete_form_submit(&$form, &$form_state) {
   $entity = $form_state['entity'];
   $wrapper = entity_metadata_wrapper($entity_type, $entity);
   $wrapper->delete();
-  $destination = drupal_get_destination();
+  $destination = backdrop_get_destination();
   $request_path = request_path();
   if (isset($destination['destination']) && $destination['destination'] != '' && $destination['destination'] != $request_path) {
     $form_state['redirect'] = $destination['destination'];
@@ -573,7 +573,7 @@ function civicrm_entity_delete_form_submit(&$form, &$form_state) {
   else {
     $form_state['redirect'] = '/';
   }
-  drupal_redirect_form($form_state);
+  backdrop_redirect_form($form_state);
 }
 
 /**
@@ -585,7 +585,7 @@ function civicrm_entity_delete_form_cancel_submit(&$form, &$form_state) {
   $entity = $form_state['entity'];
 
 
-  $destination = drupal_get_destination();
+  $destination = backdrop_get_destination();
   $request_path = request_path();
   if (isset($destination['destination']) && $destination['destination'] != '' && $destination['destination'] != $request_path) {
     $form_state['redirect'] = $destination['destination'];
@@ -593,7 +593,7 @@ function civicrm_entity_delete_form_cancel_submit(&$form, &$form_state) {
   else {
     $form_state['redirect'] = str_replace('_', '-', $entity_type) . '/' . $entity->id;
   }
-  drupal_redirect_form($form_state);
+  backdrop_redirect_form($form_state);
 }
 
 /**
@@ -629,7 +629,7 @@ function _civicrm_entity_form_contact_get_subtypes($contact_type) {
         $contact_subtypes[$subtype['name']] = $subtype['label'];
       }
     }
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     $contact_subtypes = array('' => '- None - ');
   }
   return $contact_subtypes;

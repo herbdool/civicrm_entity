@@ -352,7 +352,7 @@ function _civicrm_entity_profile_process_field_item($entity_type, $entity, $inst
   }
   if(!empty($item['target_id'])) {
     if(!empty($item['uf_group_id'])) {
-      $uf_join = entity_load_single('civicrm_uf_join', $item['target_id']);
+      $uf_join = entity_load('civicrm_uf_join', $item['target_id']);
       $uf_join->uf_group_id = $item['uf_group_id'];
       $uf_join->weight = $delta + 1;
       $uf_join->is_active = 1;
@@ -439,7 +439,7 @@ function civicrm_entity_profile_field_widget_form(&$form, &$form_state, $field, 
       $target_id = NULL;
       if(!empty($items[$delta]['target_id'])) {
         $target_id = $items[$delta]['target_id'];
-        $uf_join = entity_load_single('civicrm_uf_join', $target_id);
+        $uf_join = entity_load('civicrm_uf_join', $target_id);
         if (!empty($uf_join->uf_group_id)) {
           $uf_group_id = $uf_join->uf_group_id;
         }
@@ -566,8 +566,8 @@ function civicrm_entity_profile_field_formatter_view($entity_type, $entity, $fie
       $output_as_link = !empty($settings['link_to_profile']) ? 1 : 0;
       foreach ($items as $delta => $item) {
         if(!empty($item['target_id'])) {
-          $uf_join = entity_load_single('civicrm_uf_join', $item['target_id']);
-          $uf_group = entity_load_single('civicrm_uf_group', $uf_join->uf_group_id);
+          $uf_join = entity_load('civicrm_uf_join', $item['target_id']);
+          $uf_group = entity_load('civicrm_uf_group', $uf_join->uf_group_id);
           if ($output_as_link) {
             $value = l($uf_group->title, 'civicrm-uf-group/' . $uf_group->id);
           } else {

@@ -2041,16 +2041,12 @@ function _civicrm_entity_available_entities() {
  *
  * The whitelist approach is mostly out of caution
  *
- * @return array of enabled entities keyed by the drupal entity name
+ * @return array of enabled entities keyed by the backdrop entity name
  */
 function _civicrm_entity_enabled_entities() {
   $available_entities = _civicrm_entity_available_entities();
-  $available_entities_option_set = _civicrm_entity_available_entities_get_option_set($available_entities);
 
   $selected_entities = config_get('civicrm_entity', 'admin_enabled_entities');
-  if ($selected_entities == NULL) {
-    $selected_entities = $available_entities_option_set;
-  }
 
   $enabled_entities = array();
   foreach ($available_entities as $entity_type => $api_entity) {
@@ -2161,7 +2157,7 @@ function civicrm_entity_entity_property_info_alter(&$info) {
     $info[$backdrop_entity]['properties'] = _civicrm_entity_getproperties($civicrm_entity, 'property_info');
     // $info[$backdrop_entity]['bundles'] = array();
   }
-  // This makes the drupal user available when chaining from a rule.
+  // This makes the backdrop user available when chaining from a rule.
   $info['civicrm_contact']['properties']['civicrm_user'] = array(
     'label' => 'Backdrop User',
     'description' => 'Backdrop User for contact',
@@ -2171,7 +2167,7 @@ function civicrm_entity_entity_property_info_alter(&$info) {
     'setter callback' => 'civicrm_entity_contact_user_set',
   );
 
-  // Attach a CiviCRM Contact property to drupal users.
+  // Attach a CiviCRM Contact property to backdrop users.
   $info['user']['properties']['civicrm_contact'] = array(
     'label' => 'CiviCRM Contact',
     'description' => 'CiviCRM Contact for user',
@@ -2633,7 +2629,7 @@ function _civicrm_entity_get_entities_list($civicrm_entity) {
     $result = civicrm_api3($civicrm_entity, 'get', array(
       'options' => array('limit' => 100),
     ));
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     return array('');
   }
   $entities = array();
@@ -2892,7 +2888,7 @@ function civicrm_entity_contact_is_in_group($contact, $group_id) {
       return $group;
     }
   }
-  catch (CiviCRM_API3_Exception $e) {
+  catch (CRM_Core_Exception $e) {
     backdrop_set_message($e->getMessage());
   }
   return FALSE;
@@ -2947,7 +2943,7 @@ function _civicrm_entity_clean_login_name($str) {
 }
 
 /**
- * Given a contact object, load or create then return a drupal user.
+ * Given a contact object, load or create then return a backdrop user.
  *
  * @param object $contact
  *   CiviCRM Contact Object
@@ -3101,10 +3097,10 @@ case 'nick.middlelast':
   // on just the email.
   // Try to match Individuals, failing that, anything
   if (!empty($contact['contact_type']) && $contact['contact_type'] == 'Individual') {
-    CRM_Core_BAO_UFMatch::synchronizeUFMatch($user_object, $user_object->uid, $contact['email'], 'drupal', NULL, 'Individual', TRUE);
+    CRM_Core_BAO_UFMatch::synchronizeUFMatch($user_object, $user_object->uid, $contact['email'], 'backdrop', NULL, 'Individual', TRUE);
   }
   else {
-    CRM_Core_BAO_UFMatch::synchronizeUFMatch($user_object, $user_object->uid, $contact['email'], 'drupal', NULL, NULL, TRUE);
+    CRM_Core_BAO_UFMatch::synchronizeUFMatch($user_object, $user_object->uid, $contact['email'], 'backdrop', NULL, NULL, TRUE);
   }
   backdrop_set_message('User with username, ' . $params['cms_name'] . ', has been created.');
 
@@ -3213,7 +3209,7 @@ function civicrm_entity_action_load_create_user($entity, $is_active = 0, $notify
 function civicrm_entity_action_load_create_contact($user, $email = NULL) {
   try {
     return civicrm_entity_action_load_contact($user);
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     $ufMatch = CRM_Core_BAO_UFMatch::synchronizeUFMatch($user, $user->uid, ($email ? $email : $user->mail), 'Backdrop', FALSE, 'Individual');
     $entities = entity_load('civicrm_contact', array($ufMatch->contact_id));
     return array('civicrm_contact' => reset($entities));
@@ -3369,7 +3365,7 @@ function civicrm_entity_rules_action_assign_contact_to_group($contact, $group_id
       }
     }
   }
-  catch (CiviCRM_API3_Exception $e) {
+  catch (CRM_Core_Exception $e) {
     watchdog('civicrm_entity', t('Error assigning contact to groups via Assign CiviCRM Contact to Group rule'));
   }
 }
@@ -3397,7 +3393,7 @@ function civicrm_entity_rules_action_unassign_contact_to_group($contact, $group_
       }
     }
   }
-  catch (CiviCRM_API3_Exception $e) {
+  catch (CRM_Core_Exception $e) {
     watchdog('civicrm_entity', t('Error unassigning contact to groups via Assign CiviCRM Contact from Group rule'));
   }
 }
@@ -3449,7 +3445,7 @@ function civicrm_entity_rules_contact_subtype_options_list() {
       return $options;
     }
   }
-  catch (CiviCRM_API3_Exception $e) {
+  catch (CRM_Core_Exception $e) {
     return;
   }
 }

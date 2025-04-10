@@ -174,13 +174,13 @@ function _civicrm_entity_price_set_field_run_cc_transaction($display, $price_set
   $civicrm_entity_prise_set_field_processor_types = civicrm_entity_price_set_field_get_processor_handler_info();
   if (!empty($entity->payment_processor)) {
     if (!empty($form_state['registration_cc_block']['payment_processor_selection'])) {
-      $processor = entity_load_single('civicrm_payment_processor', $form_state['registration_cc_block']['payment_processor_selection']);
+      $processor = entity_load('civicrm_payment_processor', $form_state['registration_cc_block']['payment_processor_selection']);
     }
     else {
       return FALSE;
     }
     if (!empty($processor->payment_processor_type_id)) {
-      $processor_type = entity_load_single('civicrm_payment_processor_type', $processor->payment_processor_type_id);
+      $processor_type = entity_load('civicrm_payment_processor_type', $processor->payment_processor_type_id);
       foreach ($civicrm_entity_prise_set_field_processor_types as $id => $type) {
         if ($type['payment_processor_type'] == $processor_type->name) {
           $invoke_type = $type;
@@ -298,7 +298,7 @@ function _civicrm_entity_price_set_field_api_transact_call($params) {
   $result = array();
   try {
     $api_contribution = civicrm_api3('Contribution', 'transact', $params);
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     return array('error' => $e->getMessage());
   }
 

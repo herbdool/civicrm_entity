@@ -174,7 +174,7 @@ function civicrm_entity_discount_field_field_widget_form(&$form, &$form_state, $
 
           if (!empty($price_field_result['civicrm_price_field'])) {
             foreach ($price_field_result['civicrm_price_field'] as $id => $pf_id) {
-              $pf = entity_load_single('civicrm_price_field', $id);
+              $pf = entity_load('civicrm_price_field', $id);
               $price_field_options[$id] = $pf->label;
             }
           }

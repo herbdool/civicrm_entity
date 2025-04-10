@@ -14,15 +14,14 @@
  */
 function civicrm_entity_admin_settings_form($form, &$form_state) {
   $available_entities = _civicrm_entity_available_entities();
-
-  $available_entities_option_set = _civicrm_entity_available_entities_get_option_set($available_entities);
+  $config = config('civicrm_entity.settings');
 
   $options = array();
   foreach ($available_entities as $entity_type => $api_entity) {
     $options[$entity_type] = ucwords(str_replace('_', ' ', $api_entity));
   }
 
-  $default_value = variable_get('civicrm_entity_admin_enabled_entities', $available_entities_option_set);
+  $default_value = $config->get('admin_enabled_entities');
 
   $form['random_options'] = [
     '#type' => 'fieldset',
@@ -32,7 +31,7 @@ function civicrm_entity_admin_settings_form($form, &$form_state) {
     '#collapsed' => TRUE,
   ];
 
-  $contact_label = variable_get('civicrm_entity_contact_label_format', 'legacy');
+  $contact_label = $config->get('contact_label_format');
 
   $form['random_options']['contact_label'] = [
     '#type' => 'select',
@@ -56,11 +55,11 @@ function civicrm_entity_admin_settings_form($form, &$form_state) {
     '#tree' => TRUE,
   );
 
-  foreach ($options as $drupal_entity_type => $entity_type_label) {
-    $form['civicrm_entity_admin_enabled_entities'][$drupal_entity_type] = array(
+  foreach ($options as $backdrop_entity_type => $entity_type_label) {
+    $form['civicrm_entity_admin_enabled_entities'][$backdrop_entity_type] = array(
       '#type' => 'checkbox',
       '#title' => $entity_type_label,
-      '#default_value' => !empty($default_value[$drupal_entity_type]) ?  1 : 0,
+      '#default_value' => !empty($default_value[$backdrop_entity_type]) ?  1 : 0,
     );
   }
 
@@ -79,12 +78,15 @@ function civicrm_entity_admin_settings_form($form, &$form_state) {
  * @param $form_state
  */
 function civicrm_entity_admin_settings_form_submit($form, $form_state) {
+  $config = config('civicrm_entity.settings');
+
   // Clear caches at start, to prevent them corrupting by the changes
-  drupal_flush_all_caches();
+  backdrop_flush_all_caches();
   $settings = array();
-  foreach ($form_state['values']['civicrm_entity_admin_enabled_entities'] as $drupal_entity_type => $value) {
-    $settings[$drupal_entity_type] = !empty($value) ? $drupal_entity_type : 0;
+  foreach ($form_state['values']['civicrm_entity_admin_enabled_entities'] as $backdrop_entity_type => $value) {
+    $settings[$backdrop_entity_type] = !empty($value) ? $backdrop_entity_type : 0;
   }
-  variable_set('civicrm_entity_contact_label_format', $form_state['values']['contact_label']);
-  variable_set('civicrm_entity_admin_enabled_entities', $settings);
+  $config->set('contact_label_format', $form_state['values']['contact_label']);
+  $config->set('admin_enabled_entities', $settings);
+  $config->save();
 }

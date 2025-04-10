@@ -23,7 +23,7 @@ function _civicrm_entity_profile_get_profile_metadata($profile_id, $type = 'even
       'options' => array('sort' => "weight"),
     ));
   }
-  catch (CiviCRM_API3_Exception $e) {
+  catch (CRM_Core_Exception $e) {
     return array();
   }
   $fields = array();
@@ -162,11 +162,11 @@ function _civicrm_entity_profile_process_profile_submitted_data($profile_id, $su
     if (!empty($result['id'])) {
       switch ($entity_type) {
         case 'contact':
-            $contact = entity_load_single('civicrm_contact', $result['id']);
+            $contact = entity_load('civicrm_contact', $result['id']);
             return $contact;
         case 'participant':
           if (!empty($result['values'][$contact_id]['api.participant.create']['id'])) {
-            $participant = entity_load_single('civicrm_participant', $result['values'][$contact_id]['api.participant.create']['id']);
+            $participant = entity_load('civicrm_participant', $result['values'][$contact_id]['api.participant.create']['id']);
             return $participant;
           }
           else return FALSE;
@@ -176,7 +176,7 @@ function _civicrm_entity_profile_process_profile_submitted_data($profile_id, $su
       return FALSE;
     }
   }
-  catch (CiviCRM_API3_Exception $e) {
+  catch (CRM_Core_Exception $e) {
     drupal_set_message($e->getMessage(), 'warning');
     return FALSE;
   }
@@ -245,7 +245,7 @@ function _civicrm_entity_profile_get_profiles($entity_type, $id, $type) {
  * @return string
  */
 function _civicrm_entity_profile_get_profile_title($profile_id) {
-  $uf_group = entity_load_single('civicrm_uf_group', $profile_id);
+  $uf_group = entity_load('civicrm_uf_group', $profile_id);
   if (!empty($uf_group->title)) {
     return $uf_group->title;
   }
@@ -259,7 +259,7 @@ function _civicrm_entity_profile_get_profile_title($profile_id) {
  * @return array
  */
 function _civicrm_entity_profile_get_profile_entity_types($profile_id) {
-  $uf_group = entity_load_single('civicrm_uf_group', $profile_id);
+  $uf_group = entity_load('civicrm_uf_group', $profile_id);
   if (!empty($uf_group->group_type)) {
     return !empty($uf_group->group_type) ? explode(',', $uf_group->group_type) : array();
   }

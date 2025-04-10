@@ -108,7 +108,7 @@ function civicrm_entity_price_set_field_send_contribution_receipt($contribution_
         'receipt_from_email' => $from_address,
       ));
     }
-    catch (CiviCRM_API3_Exception $e) {
+    catch (CRM_Core_Exception $e) {
       watchdog('civicrm_entity_price_set_field', 'Contribution Receipt sending failed');
     }
   }
@@ -336,7 +336,7 @@ function _civicrm_entity_price_set_field_process_field_items($entity_type, $enti
         'id' => $entity_id,
         'sequential' => 1,
       ));
-    } catch (CiviCRM_API3_Exception $e) {
+    } catch (CRM_Core_Exception $e) {
       drupal_set_message('Error fetching event when attempting to save price set');
       return;
     }
@@ -478,7 +478,7 @@ function _civicrm_entity_price_set_field_process_field_items($entity_type, $enti
  */
 function _civicrm_entity_price_set_field_get_relevant_entities($price_set_id) {
   $data = array();
-  $price_set = entity_load_single('civicrm_price_set', $price_set_id);
+  $price_set = entity_load('civicrm_price_set', $price_set_id);
   if ($price_set) {
     $data['price_set'] = $price_set;
     $price_field_query = new EntityFieldQuery();
@@ -490,7 +490,7 @@ function _civicrm_entity_price_set_field_get_relevant_entities($price_set_id) {
     if (!empty($price_field_result['civicrm_price_field'])) {
       foreach ($price_field_result['civicrm_price_field'] as $id => $pf_id) {
         $data['price_fields'][$id]['price_field_id'] = $id;
-        $data['price_fields'][$id]['pf_entity'] = entity_load_single('civicrm_price_field', $id);
+        $data['price_fields'][$id]['pf_entity'] = entity_load('civicrm_price_field', $id);
         $data['price_fields'][$id]['price_field_values'] = array();
 
         $price_field_value_query = new EntityFieldQuery();
@@ -519,7 +519,7 @@ function _civicrm_entity_price_set_field_get_relevant_entities($price_set_id) {
  */
 function _civicrm_entity_price_set_field_get_relevant_entities_clone($price_set_id) {
   $data = array();
-  $price_set = clone entity_load_single('civicrm_price_set', $price_set_id);
+  $price_set = clone entity_load('civicrm_price_set', $price_set_id);
   if ($price_set) {
     $data['price_set'] = $price_set;
     $price_field_query = new EntityFieldQuery();
@@ -531,7 +531,7 @@ function _civicrm_entity_price_set_field_get_relevant_entities_clone($price_set_
     if (!empty($price_field_result['civicrm_price_field'])) {
       foreach ($price_field_result['civicrm_price_field'] as $id => $pf_id) {
         $data['price_fields'][$id]['price_field_id'] = $id;
-        $data['price_fields'][$id]['pf_entity'] = clone entity_load_single('civicrm_price_field', $id);
+        $data['price_fields'][$id]['pf_entity'] = clone entity_load('civicrm_price_field', $id);
         $data['price_fields'][$id]['price_field_values'] = array();
 
         $price_field_value_query = new EntityFieldQuery();
@@ -541,7 +541,7 @@ function _civicrm_entity_price_set_field_get_relevant_entities_clone($price_set_
           ->execute();
         if (!empty($price_field_value_result['civicrm_price_field_value'])) {
           foreach ($price_field_value_result['civicrm_price_field_value'] as $id2 => $pfv_id) {
-            $data['price_fields'][$id]['price_field_values'][$id2] = clone entity_load_single('civicrm_price_field_value', $id2);
+            $data['price_fields'][$id]['price_field_values'][$id2] = clone entity_load('civicrm_price_field_value', $id2);
           }
         }
       }

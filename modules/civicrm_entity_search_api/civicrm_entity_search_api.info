@@ -4,4 +4,5 @@ dependencies[] = civicrm
 dependencies[] = civicrm_entity
 dependencies[] = search_api
 package = CiviCRM Entity
-core = 7.x
+backdrop = 1.x
+type = module

@@ -14,7 +14,7 @@ class civicrm_entity_views_extras_handler_event_is_full extends views_handler_fi
       else {
         return 0;
       }
-    } catch (CiviCRM_API3_Exception $e) {
+    } catch (CRM_Core_Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
       return;
     }

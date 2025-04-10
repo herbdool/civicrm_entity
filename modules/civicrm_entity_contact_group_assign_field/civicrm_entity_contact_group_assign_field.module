@@ -86,7 +86,7 @@ function civicrm_entity_contact_group_assign_field_field_settings_form($field, $
         $groups[$id] = $group['title'];
       }
     }
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     $groups = array();
   }
 
@@ -123,7 +123,7 @@ function civicrm_entity_contact_group_assign_field_field_load($entity_type, $ent
         $result = civicrm_api3('GroupContact', 'get', array(
           'contact_id' => $contact_id,
         ));
-      } catch (CiviCRM_API3_Exception $e) {
+      } catch (CRM_Core_Exception $e) {
         continue;
       }
       $api_contact_groups = array();
@@ -362,7 +362,7 @@ function civicrm_entity_contact_group_assign_field_field_formatter_view($entity_
                 'id' => $group_id,
               ));
 
-            } catch (CiviCRM_API3_Exception $e) {
+            } catch (CRM_Core_Exception $e) {
               continue;
             }
             $group_text = $result;
@@ -461,7 +461,7 @@ function _civicrm_entity_contact_group_assign_field_get_field_settings_groups($f
         'id' => $gid,
       ));
       $groups[$id] = $result;
-    } catch (CiviCRM_API3_Exception $e) {
+    } catch (CRM_Core_Exception $e) {
       continue;
     }
   }
@@ -483,7 +483,7 @@ function _civicrm_entity_contact_group_assign_field_is_contact_in_group($contact
       'group_id' => $group_id,
       'status' => 'Added',
     ));
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     return FALSE;
   }
   if ($result['count']) {
@@ -508,7 +508,7 @@ function _civicrm_entity_contact_group_assign_field_add_contact_to_group($contac
       'group_id' => $group_id,
       'status' => 'Added',
     ));
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
 
   }
 }
@@ -527,7 +527,7 @@ function _civicrm_entity_contact_group_assign_field_remove_contact_from_group($c
       'group_id' => $group_id,
       'status' => 'Removed',
     ));
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
 
   }
 }

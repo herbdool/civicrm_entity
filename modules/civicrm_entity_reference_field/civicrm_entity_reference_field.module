@@ -217,7 +217,7 @@ function civicrm_entity_reference_field_field_load($entity_type, $entities, $fie
           $params['options'] = array('sort' => 'is_primary DESC');
         }
         $result = civicrm_api3($field['settings']['target_entity_type'], 'get', $params);
-      } catch (CiviCRM_API3_Exception $e) {
+      } catch (CRM_Core_Exception $e) {
         $error = $e->getMessage();
         drupal_set_message($error, 'error');
         continue;

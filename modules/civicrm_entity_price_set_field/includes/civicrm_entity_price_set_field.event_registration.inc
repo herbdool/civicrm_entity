@@ -543,7 +543,7 @@ function _civicrm_entity_price_set_field_setup_event_registration_form_fapi(&$fo
       $pp_default = '';
       if (is_array($form_state['event']->payment_processor)) {
         foreach ($form_state['event']->payment_processor as $pp_delta => $pp_id) {
-          $pp = entity_load_single('civicrm_payment_processor', $pp_id);
+          $pp = entity_load('civicrm_payment_processor', $pp_id);
           $payment_processor_options[$pp_id] = ( empty($pp->title) ? $pp->name : $pp->title );
           if (!empty($pp->is_default)) {
             $pp_default = $pp_id;
@@ -551,7 +551,7 @@ function _civicrm_entity_price_set_field_setup_event_registration_form_fapi(&$fo
         }
       }
       else {
-        $pp = entity_load_single('civicrm_payment_processor', $form_state['event']->payment_processor);
+        $pp = entity_load('civicrm_payment_processor', $form_state['event']->payment_processor);
         $payment_processor_options[$form_state['event']->payment_processor] = ( empty($pp->title) ? $pp->name : $pp->title );
         $pp_default = $form_state['event']->payment_processor;
       }
@@ -705,7 +705,7 @@ function civicrm_entity_price_set_field_display_form_event_submit($form, &$form_
               return;
             }
 
-            $form_state['contacts'][$count] = entity_load_single('civicrm_contact', $dedupe_result['id']);
+            $form_state['contacts'][$count] = entity_load('civicrm_contact', $dedupe_result['id']);
           }
           // submit main registrant contact profile here, if there isn't a contact_id yet (its new)
           // we need the contact_id to run the transaction and create a contribution

@@ -90,7 +90,7 @@ function civicrm_entity_contact_assign_rel_type_list_field_field_settings_form($
         $relationship_types[$id] = $relationship_type['description'];
       }
     }
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     $relationship_types = array();
   }
 
@@ -138,7 +138,7 @@ function civicrm_entity_contact_assign_rel_type_list_field_field_load($entity_ty
           'contact_id_b' => $contact_b_id,
           'is_active' => 1,
         ));
-      } catch (CiviCRM_API3_Exception $e) {
+      } catch (CRM_Core_Exception $e) {
         continue;
       }
       $api_contact_relationships = array();
@@ -390,7 +390,7 @@ function civicrm_entity_contact_assign_rel_type_list_field_field_formatter_view(
                 'id' => $relationship_type_id,
               ));
 
-            } catch (CiviCRM_API3_Exception $e) {
+            } catch (CRM_Core_Exception $e) {
               continue;
             }
             $relationship_id = $relationship_result;
@@ -494,7 +494,7 @@ function _civicrm_entity_contact_assign_rel_type_list_field_get_field_settings_r
         'id' => $rtid,
       ));
       $relationship_types[$id] = $result;
-    } catch (CiviCRM_API3_Exception $e) {
+    } catch (CRM_Core_Exception $e) {
       continue;
     }
   }
@@ -518,7 +518,7 @@ function _civicrm_entity_contact_assign_rel_type_list_field_contact_has_relation
       'relationship_type_id' => $relationship_type_id,
       'is_active' => 1,
     ));
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
     return FALSE;
   }
   if ($result['count']) {
@@ -547,7 +547,7 @@ function _civicrm_entity_contact_assign_rel_type_list_field_add_contact_relation
       'is_active' => 1,
       'start_date' => $start_date,
     ));
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
 
   }
 }
@@ -581,7 +581,7 @@ function _civicrm_entity_contact_assign_rel_type_list_field_remove_contact_relat
     }
 
     $result = civicrm_api3('Relationship', 'create', $params);
-  } catch (CiviCRM_API3_Exception $e) {
+  } catch (CRM_Core_Exception $e) {
 
   }
 }
