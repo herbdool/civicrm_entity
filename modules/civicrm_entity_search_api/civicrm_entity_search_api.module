@@ -19,23 +19,23 @@ function civicrm_entity_search_api_civicrm_post($op, $objectName, $objectId, &$o
     case 'Individual':
     case 'Household':
     case 'Organization':
-     $drupal_entity_type = 'civicrm_contact';
+     $backdrop_entity_type = 'civicrm_contact';
      break;
     case 'Membership':
-     $drupal_entity_type = 'civicrm_membership';
+     $backdrop_entity_type = 'civicrm_membership';
      break;
   }
   $enabled_entities = _civicrm_entity_enabled_entities();
-  if(!empty($drupal_entity_type) && !empty($enabled_entities[$drupal_entity_type])) {
+  if(!empty($backdrop_entity_type) && !empty($enabled_entities[$backdrop_entity_type])) {
     switch ($op) {
       case 'create':
-        search_api_track_item_insert($drupal_entity_type, array($objectId));
+        search_api_track_item_insert($backdrop_entity_type, array($objectId));
         break;
       case 'edit':
-        search_api_track_item_change($drupal_entity_type, array($objectId));
+        search_api_track_item_change($backdrop_entity_type, array($objectId));
         break;
       case 'delete':
-        search_api_track_item_delete($drupal_entity_type, array($objectId));
+        search_api_track_item_delete($backdrop_entity_type, array($objectId));
         break;
     }
   }

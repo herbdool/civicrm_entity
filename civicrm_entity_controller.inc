@@ -36,7 +36,7 @@ class CivicrmEntityController extends EntityPlusController {
 
     /*
     * this seems 'harmless' - but not necessarily relevant?
-    * ie. deals with caching on the drupal side
+    * ie. deals with caching on the backdrop side
     */
     // Create a new variable which is either a prepared version of the $ids
     // array for later comparison with the entity cache, or FALSE if no $ids
@@ -64,7 +64,7 @@ class CivicrmEntityController extends EntityPlusController {
 
     /*
     * OK - here is where we will actually 'Do' something that is Civi-Specific
-    * In drupal land $ids = FALSE would load all - let's only do specific
+    * In backdrop land $ids = FALSE would load all - let's only do specific
     */
     // Load any remaining entities from the database. This is the case if $ids
     // is set to FALSE (so we load all entities), if there are any ids left to
@@ -134,7 +134,7 @@ class CivicrmEntityController extends EntityPlusController {
 
     try {
       $entity->is_new = !empty($entity->is_new) || empty($entity->{$this->idKey});
-      // @TODO should we call this hook when drupal saves (as opposed
+      // @TODO should we call this hook when backdrop saves (as opposed
       // to Civi?) ditto insert, update.
 
       $this->invoke('presave', $entity);
@@ -159,11 +159,11 @@ class CivicrmEntityController extends EntityPlusController {
         'changed',
       );
       foreach ($params as $key => $value) {
-        // unset some drupal form stuff
+        // unset some backdrop form stuff
         if (in_array($key, $params_to_unset)) {
           unset($params[$key]);
         }
-        // unset the drupal fields
+        // unset the backdrop fields
         if (strpos($key, 'field_') === 0) {
           unset($params[$key]);
         }

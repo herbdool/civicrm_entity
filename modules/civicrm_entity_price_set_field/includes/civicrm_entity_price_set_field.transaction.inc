@@ -25,7 +25,7 @@ function civicrm_entity_price_set_field_get_processor_handler_info($id = NULL) {
     }
   }
 
-  drupal_alter('civicrm_entity_price_set_field_processor_info', $results);
+  backdrop_alter('civicrm_entity_price_set_field_processor_info', $results);
 
   if ($id && !empty($result[$id])) {
     return $results[$id];
@@ -157,7 +157,7 @@ function _civicrm_entity_price_set_field_calculate_total($price_set_data, $entit
     'entity' => $entity,
     'form_state' => $form_state,
   );
-  drupal_alter('civicrm_entity_price_set_field_calculate_total', $total, $context);
+  backdrop_alter('civicrm_entity_price_set_field_calculate_total', $total, $context);
   return $total;
 }
 
@@ -279,7 +279,7 @@ function civicrm_entity_price_set_field_transact_payment_processing($display, $p
   $result = _civicrm_entity_price_set_field_api_transact_call($params);
 
   if (!empty($result['error'])) {
-    drupal_set_message($result['error']);
+    backdrop_set_message($result['error']);
     return FALSE;
   }
 

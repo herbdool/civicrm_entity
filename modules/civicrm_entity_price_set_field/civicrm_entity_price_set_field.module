@@ -337,14 +337,14 @@ function _civicrm_entity_price_set_field_process_field_items($entity_type, $enti
         'sequential' => 1,
       ));
     } catch (CRM_Core_Exception $e) {
-      drupal_set_message('Error fetching event when attempting to save price set');
+      backdrop_set_message('Error fetching event when attempting to save price set');
       return;
     }
     if ($result['count']) {
       $event = $result['values'][0];
     }
     else {
-      drupal_set_message('Error fetching event when attempting to save price set');
+      backdrop_set_message('Error fetching event when attempting to save price set');
       return;
     }
 
@@ -368,7 +368,7 @@ function _civicrm_entity_price_set_field_process_field_items($entity_type, $enti
       try {
         $price_set_wrapper->save();
       } catch (Exception $e) {
-        drupal_set_message('Error creating price set.');
+        backdrop_set_message('Error creating price set.');
         watchdog_exception('civicrm_entity_price_set_field', $e);
         return;
       }
@@ -399,7 +399,7 @@ function _civicrm_entity_price_set_field_process_field_items($entity_type, $enti
       try {
         $price_field_wrapper->save();
       } catch (Exception $e) {
-        drupal_set_message('Error creating price field.');
+        backdrop_set_message('Error creating price field.');
         watchdog_exception('civicrm_entity_price_set_field', $e);
         return;
       }
@@ -450,7 +450,7 @@ function _civicrm_entity_price_set_field_process_field_items($entity_type, $enti
       try {
         $wrapper->save();
       } catch (Exception $e) {
-        drupal_set_message('Error saving price field value.');
+        backdrop_set_message('Error saving price field value.');
         watchdog_exception('civicrm_entity_price_set_field', $e);
       }
     }
@@ -462,7 +462,7 @@ function _civicrm_entity_price_set_field_process_field_items($entity_type, $enti
         try {
           $wrapper->delete();
         } catch (Exception $e) {
-          drupal_set_message('Error removing price field value.');
+          backdrop_set_message('Error removing price field value.');
           watchdog_exception('civicrm_entity_price_set_field', $e);
         }
       }
@@ -632,7 +632,7 @@ function civicrm_entity_price_set_field_field_widget_form(&$form, &$form_state, 
         );
       $element['price_set_id'] = $widget;
       _civicrm_entity_price_set_field_prepare_simple_widget($price_set_id, $instance, $element);
-      drupal_add_js(drupal_get_path('module', 'civicrm_entity_price_set_field') . '/js/civicrm_entity_price_set_field_simple_widget.js');
+      backdrop_add_js(backdrop_get_path('module', 'civicrm_entity_price_set_field') . '/js/civicrm_entity_price_set_field_simple_widget.js');
       break;
     case 'civicrm_entity_price_set_field_full_edit_widget':
       // To Be Developed -- this widget should have the works, multiple price fields, editing of price set settings, price field settings etc...
@@ -687,7 +687,7 @@ function _civicrm_entity_price_set_field_prepare_simple_widget($price_set_id, $i
  */
 function civicrm_entity_price_set_field_field_widget_form_alter(&$element, &$form_state, $context) {
   if ($context['instance']['widget']['type'] == 'civicrm_entity_price_set_field_simple_widget') {
-    $element['#attached']['css'][] = drupal_get_path('module', 'civicrm_entity_price_set_field') . '/css/simple_widget.css';
+    $element['#attached']['css'][] = backdrop_get_path('module', 'civicrm_entity_price_set_field') . '/css/simple_widget.css';
     $price_set_id = $element['price_set_id']['#value'];
     // need these form state checks because of all the ajax
     // setup, or reuse the data
@@ -856,7 +856,7 @@ function civicrm_entity_price_set_field_theme($existing, $type, $theme, $path) {
  */
 function theme_civicrm_entity_price_set_field_price_field_drag_components($vars) {
   $element = $vars['element'];
-  drupal_add_tabledrag('price_field_value_table', 'order', 'sibling', 'item-row-weight');
+  backdrop_add_tabledrag('price_field_value_table', 'order', 'sibling', 'item-row-weight');
 
   $header = array(
     '' => '',
@@ -872,7 +872,7 @@ function theme_civicrm_entity_price_set_field_price_field_drag_components($vars)
     $row = array();
     $row['data'] = array();
     foreach ($header as $fieldname => $title) {
-      $row['data'][] = drupal_render($element[$key][$fieldname]);
+      $row['data'][] = backdrop_render($element[$key][$fieldname]);
       $row['class'] = array('draggable');
     }
     $rows[] = $row;
@@ -950,8 +950,8 @@ function _civicrm_entity_price_set_field_simple_widget_price_field_ajax($form, $
       $parents[] = $parent;
     }
   }
-  $output = drupal_array_get_nested_value($form, $parents);
-  $row_state = drupal_array_get_nested_value($form_state['input'], $parents);
+  $output = backdrop_array_get_nested_value($form, $parents);
+  $row_state = backdrop_array_get_nested_value($form_state['input'], $parents);
 
   $selected_id = 0;
 
@@ -993,7 +993,7 @@ function _civicrm_entity_price_set_field_label_element_validate($element, &$form
       $parents[] = $parent;
     }
   }
-  $price_field_values = drupal_array_get_nested_value($form_state['values'], $parents);
+  $price_field_values = backdrop_array_get_nested_value($form_state['values'], $parents);
   if (strpos($element_id, 'new-') !== FALSE && empty($price_field_values[$element_id]['label']) && empty($price_field_values[$element_id]['amount']) && empty($price_field_values[$element_id]['is_default'])) {
     // ignore?
   }
@@ -1024,7 +1024,7 @@ function _civicrm_entity_price_set_field_amount_element_validate($element, &$for
       $parents[] = $parent;
     }
   }
-  $price_field_values = drupal_array_get_nested_value($form_state['values'], $parents);
+  $price_field_values = backdrop_array_get_nested_value($form_state['values'], $parents);
   if (strpos($element_id, 'new-') !== FALSE && empty($price_field_values[$element_id]['label']) && empty($price_field_values[$element_id]['amount']) && empty($price_field_values[$element_id]['is_default'])) {
     // ignore?
   }
@@ -1128,7 +1128,7 @@ function civicrm_entity_price_set_field_field_formatter_view($entity_type, $enti
         }
         switch ($entity_type) {
           case 'civicrm_event':
-            $price_set_form = drupal_get_form('civicrm_entity_price_set_field_display_form_event', $price_set_id, $entity_type, $entity, $field, $instance, $display);
+            $price_set_form = backdrop_get_form('civicrm_entity_price_set_field_display_form_event', $price_set_id, $entity_type, $entity, $field, $instance, $display);
             break;
         }
         $price_set_form['#form_id'] = 'civicrm_entity_price_set_display_form-' . $field['field_name'] . '-' . $langcode . '-' . $delta;
@@ -1166,10 +1166,10 @@ function civicrm_entity_price_set_field_form_civicrm_entity_admin_settings_form_
     'civicrm_payment_processor' => 'Payment Processor',
     'civicrm_payment_processor_type' => 'Payment Processor Type',
   );
-  foreach ($required_entities as $drupal_entity_type => $entity_type_label) {
-    if (empty($selected_entities[$drupal_entity_type])) {
-      $form['civicrm_entity_admin_enabled_entities'][$drupal_entity_type]['#disabled'] = TRUE;
-      $form['civicrm_entity_admin_enabled_entities'][$drupal_entity_type]['#default_value'] = 1;
+  foreach ($required_entities as $backdrop_entity_type => $entity_type_label) {
+    if (empty($selected_entities[$backdrop_entity_type])) {
+      $form['civicrm_entity_admin_enabled_entities'][$backdrop_entity_type]['#disabled'] = TRUE;
+      $form['civicrm_entity_admin_enabled_entities'][$backdrop_entity_type]['#default_value'] = 1;
     }
   }
 
@@ -1199,9 +1199,9 @@ function civicrm_entity_price_set_field_admin_settings_form_validate($form, &$fo
     'civicrm_payment_processor_type' => 'Payment Processor Type',
   );
 
-  foreach ($required_entities as $drupal_entity_type => $entity_type_label) {
-    if (empty($selected_entities[$drupal_entity_type])) {
-      form_set_error('civicrm_entity_admin_enabled_entities][' . $drupal_entity_type, $entity_type_label . ' required by CiviCRM Entity Price Set Field module');
+  foreach ($required_entities as $backdrop_entity_type => $entity_type_label) {
+    if (empty($selected_entities[$backdrop_entity_type])) {
+      form_set_error('civicrm_entity_admin_enabled_entities][' . $backdrop_entity_type, $entity_type_label . ' required by CiviCRM Entity Price Set Field module');
     }
   }
 }

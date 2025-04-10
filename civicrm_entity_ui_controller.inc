@@ -58,7 +58,7 @@ class CivicrmEntityUIController extends EntityContentUIController {
 
   public function hook_menu() {
     /* add menu items for all entities, will display with id as argument to url
-     * for example goto <drupal_root>/civicrm_contact/1, in the example id =1
+     * for example goto <backdrop_root>/civicrm_contact/1, in the example id =1
      */
     $civicrm_entities = _civicrm_entity_enabled_entities();
     foreach ($civicrm_entities as $key => $value) {

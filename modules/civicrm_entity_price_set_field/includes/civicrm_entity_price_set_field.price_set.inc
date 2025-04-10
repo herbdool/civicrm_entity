@@ -45,8 +45,8 @@ function _civicrm_entity_price_set_field_setup_price_set_fapi(&$form, &$form_sta
         '#attributes' => array(
           'class' => array(
             'civicrm-price-field',
-            'price-field-type-' . drupal_html_class(strtolower($price_field['pf_entity']->html_type)),
-            'price-field-' . drupal_html_class(strtolower($price_field['pf_entity']->name))
+            'price-field-type-' . backdrop_html_class(strtolower($price_field['pf_entity']->html_type)),
+            'price-field-' . backdrop_html_class(strtolower($price_field['pf_entity']->name))
           ),
         ),
       );

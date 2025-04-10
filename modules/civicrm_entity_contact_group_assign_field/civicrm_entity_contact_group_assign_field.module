@@ -547,10 +547,10 @@ function civicrm_entity_contact_group_assign_field_form_civicrm_entity_admin_set
     'civicrm_contact' => 'Contact',
     'civicrm_group' => 'Group',
   );
-  foreach ($required_entities as $drupal_entity_type => $entity_type_label) {
-    if (empty($selected_entities[$drupal_entity_type])) {
-      $form['civicrm_entity_admin_enabled_entities'][$drupal_entity_type]['#disabled'] = TRUE;
-      $form['civicrm_entity_admin_enabled_entities'][$drupal_entity_type]['#default_value'] = 1;
+  foreach ($required_entities as $backdrop_entity_type => $entity_type_label) {
+    if (empty($selected_entities[$backdrop_entity_type])) {
+      $form['civicrm_entity_admin_enabled_entities'][$backdrop_entity_type]['#disabled'] = TRUE;
+      $form['civicrm_entity_admin_enabled_entities'][$backdrop_entity_type]['#default_value'] = 1;
     }
   }
 
@@ -571,9 +571,9 @@ function civicrm_entity_contact_group_assign_field_admin_settings_form_validate(
     'civicrm_group' => 'Group',
   );
 
-  foreach ($required_entities as $drupal_entity_type => $entity_type_label) {
-    if (empty($selected_entities[$drupal_entity_type])) {
-      form_set_error('civicrm_entity_admin_enabled_entities][' . $drupal_entity_type, $entity_type_label . ' required by CiviCRM Contact Group Assign Field module');
+  foreach ($required_entities as $backdrop_entity_type => $entity_type_label) {
+    if (empty($selected_entities[$backdrop_entity_type])) {
+      form_set_error('civicrm_entity_admin_enabled_entities][' . $backdrop_entity_type, $entity_type_label . ' required by CiviCRM Contact Group Assign Field module');
     }
   }
 }

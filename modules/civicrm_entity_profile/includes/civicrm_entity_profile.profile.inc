@@ -177,7 +177,7 @@ function _civicrm_entity_profile_process_profile_submitted_data($profile_id, $su
     }
   }
   catch (CRM_Core_Exception $e) {
-    drupal_set_message($e->getMessage(), 'warning');
+    backdrop_set_message($e->getMessage(), 'warning');
     return FALSE;
   }
 }

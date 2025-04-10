@@ -120,7 +120,7 @@ function civicrm_case_activity_reference_field_field_load($entity_type, $entitie
       }
     } catch (Exception $e) {
       $error = $e->getMessage();
-      drupal_set_message($error, 'error');
+      backdrop_set_message($error, 'error');
       continue;
     }
     if (!empty($result)) {
@@ -629,10 +629,10 @@ function civicrm_case_activity_reference_field_form_civicrm_entity_admin_setting
     'civicrm_case' => 'Case',
     'civicrm_activity' => 'Activity',
   );
-  foreach ($required_entities as $drupal_entity_type => $entity_type_label) {
-    if (empty($selected_entities[$drupal_entity_type])) {
-      $form['civicrm_entity_admin_enabled_entities'][$drupal_entity_type]['#disabled'] = TRUE;
-      $form['civicrm_entity_admin_enabled_entities'][$drupal_entity_type]['#default_value'] = 1;
+  foreach ($required_entities as $backdrop_entity_type => $entity_type_label) {
+    if (empty($selected_entities[$backdrop_entity_type])) {
+      $form['civicrm_entity_admin_enabled_entities'][$backdrop_entity_type]['#disabled'] = TRUE;
+      $form['civicrm_entity_admin_enabled_entities'][$backdrop_entity_type]['#default_value'] = 1;
     }
   }
 
@@ -654,9 +654,9 @@ function civicrm_case_activity_reference_field_admin_settings_form_validate($for
     'civicrm_activity' => 'Activity',
   );
 
-  foreach ($required_entities as $drupal_entity_type => $entity_type_label) {
-    if (empty($selected_entities[$drupal_entity_type])) {
-      form_set_error('civicrm_entity_admin_enabled_entities][' . $drupal_entity_type, $entity_type_label . ' required by CiviCRM Case Activity Reference Field module');
+  foreach ($required_entities as $backdrop_entity_type => $entity_type_label) {
+    if (empty($selected_entities[$backdrop_entity_type])) {
+      form_set_error('civicrm_entity_admin_enabled_entities][' . $backdrop_entity_type, $entity_type_label . ' required by CiviCRM Case Activity Reference Field module');
     }
   }
 }

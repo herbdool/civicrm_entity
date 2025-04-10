@@ -31,7 +31,7 @@
  * -display suite: (optional) array
  *   -link fields: (optional) array of arrays of link field properties
  *     -link_field: Field that will be rendered as a link
- *     -target: drupal entity machine name of the entity to link to
+ *     -target: backdrop entity machine name of the entity to link to
  *  -option fields: (optional) array of fields to apply option field formatters to
  *  -boolean fields: (optional) array of fields to apply yes/no, true/false field formatters to
  *
@@ -50,7 +50,7 @@ function hook_civicrm_entity_supported_info(&$civicrm_entity_info) {
     ),
     'theme' => array(
       'template' => 'civicrm-phone',
-      'path' => drupal_get_path('module', 'civicrm_entity') . '/templates',
+      'path' => backdrop_get_path('module', 'civicrm_entity') . '/templates',
     ),
     'display suite' => array(
       'link fields' => array(

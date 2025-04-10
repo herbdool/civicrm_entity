@@ -39,7 +39,7 @@ function civicrm_entity_metadata_convert_schema($table) {
     if ($type = _entity_metadata_convert_schema_type($info['type'])) {
       $properties[$name] = array(
         'type' => $type,
-        'label' => drupal_ucfirst($name),
+        'label' => backdrop_ucfirst($name),
         'schema field' => $name,
         // As we cannot know about any setter access, leave out the setter
         // callback. For getting usually no further access callback is needed.

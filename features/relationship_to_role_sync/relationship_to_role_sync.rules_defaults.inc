@@ -34,7 +34,7 @@ function relationship_to_role_sync_default_rules_configuration() {
           }
         },
         { "user_add_role" : { "account" : [ "civicrm-user" ], "roles" : { "value" : { "4" : "4" } } } },
-        { "drupal_message" : { "message" : "[civicrm-user:uid] has had role added" } }
+        { "backdrop_message" : { "message" : "[civicrm-user:uid] has had role added" } }
       ]
     }
   }');
@@ -89,7 +89,7 @@ function relationship_to_role_sync_default_rules_configuration() {
             "PROVIDE" : { "civicrm_user" : { "civicrm_user" : "Created\\/ Loaded Drupal User" } }
           }
         },
-        { "drupal_message" : { "message" : "[civicrm-user:uid] has had CMS Editor role removed" } },
+        { "backdrop_message" : { "message" : "[civicrm-user:uid] has had CMS Editor role removed" } },
         { "user_remove_role" : { "account" : [ "civicrm-user" ], "roles" : { "value" : { "4" : "4" } } } }
       ]
     }

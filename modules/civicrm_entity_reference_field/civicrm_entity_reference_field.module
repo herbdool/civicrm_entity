@@ -100,7 +100,7 @@ function civicrm_entity_reference_field_field_settings_form($field, $instance, $
   $civicrm_entities = _civicrm_entity_enabled_entities();
 
   $entities = array();
-  foreach ($civicrm_entities as $drupal_name => $civicrm_name) {
+  foreach ($civicrm_entities as $backdrop_name => $civicrm_name) {
     $entities[$civicrm_name] = ucwords(str_replace('_', ' ', $civicrm_name));
   }
 
@@ -219,7 +219,7 @@ function civicrm_entity_reference_field_field_load($entity_type, $entities, $fie
         $result = civicrm_api3($field['settings']['target_entity_type'], 'get', $params);
       } catch (CRM_Core_Exception $e) {
         $error = $e->getMessage();
-        drupal_set_message($error, 'error');
+        backdrop_set_message($error, 'error');
         continue;
       }
       if ($result['count']) {

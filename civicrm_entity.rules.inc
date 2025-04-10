@@ -17,8 +17,8 @@ function civicrm_entity_rules_data_info() {
   $info = array();
   $entities = _civicrm_entity_enabled_entities();
 
-  foreach ($entities as $drupal_entity => $civicrm_entity) {
-    $info[$drupal_entity] = array(
+  foreach ($entities as $backdrop_entity => $civicrm_entity) {
+    $info[$backdrop_entity] = array(
       'label' => t('CiviCRM @entity', array('@entity' => $civicrm_entity)),
       // parent => 'civicrm_entity',
       'wrap' => TRUE,
@@ -26,7 +26,7 @@ function civicrm_entity_rules_data_info() {
       // 'ui class' => 'RulesDataUIEntityExportable',
       'module' => 'civicrm',
     );
-    $info[$drupal_entity]['property_info'] = _civicrm_entity_getproperties($civicrm_entity);
+    $info[$backdrop_entity]['property_info'] = _civicrm_entity_getproperties($civicrm_entity);
     // I don't think these are being 'kept'.
     $fields = civicrm_api($civicrm_entity, 'getfields', array(
       'version' => 3,
@@ -40,7 +40,7 @@ function civicrm_entity_rules_data_info() {
           $fks = _civicrm_entity_chained_fks();
           if (array_key_exists($field_specs['FKClassName'], $fks)) {
             $fks_entity = $fks[$field_specs['FKClassName']];
-            $info[$drupal_entity]['property_info'][$fieldname] = array(
+            $info[$backdrop_entity]['property_info'][$fieldname] = array(
               'label' => empty($field_specs['title']) ? 'label not defined in CiviCRM schema' : $field_specs['title'],
               'type' => 'civicrm_' . $fks_entity,
             );
@@ -49,20 +49,20 @@ function civicrm_entity_rules_data_info() {
 
         if ($fieldname == 'entity_id') {
           $fks_entity = 'contact';
-          $info[$drupal_entity]['property_info'][$fieldname] = array(
+          $info[$backdrop_entity]['property_info'][$fieldname] = array(
             'label' => empty($field_specs['title']) ? 'label not defined in CiviCRM schema' : $field_specs['title'],
             'type' => 'civicrm_' . $fks_entity,
           );
         }
 
-        $info[$drupal_entity]['property_info'][$fieldname] = array(
+        $info[$backdrop_entity]['property_info'][$fieldname] = array(
           'label' => empty($field_specs['title']) ? 'label not defined in CiviCRM schema' : $field_specs['title'],
           'type' => 'integer',
         );
         if (!empty($field_specs['options'])) {
-          $info[$drupal_entity]['property_info'][$fieldname]['type'] = 'list<integer>';
-          $info[$drupal_entity]['property_info'][$fieldname]['options list'] = '_civicrm_entity_rules_attach_options';
-          $info[$drupal_entity]['property_info'][$fieldname]['options data'] = $field_specs['options'];
+          $info[$backdrop_entity]['property_info'][$fieldname]['type'] = 'list<integer>';
+          $info[$backdrop_entity]['property_info'][$fieldname]['options list'] = '_civicrm_entity_rules_attach_options';
+          $info[$backdrop_entity]['property_info'][$fieldname]['options data'] = $field_specs['options'];
         }
       }
     }

@@ -140,7 +140,7 @@ function civicrm_entity_price_set_field_display_form_event($form, &$form_state) 
               'instance' => $form_state['instance'],
               'display_settings' => $form_state['display_settings'],
             );
-            drupal_alter('civicrm_entity_price_set_field_registration_form_price_set_data', $form_state['price_set_data'][$count], $context);
+            backdrop_alter('civicrm_entity_price_set_field_registration_form_price_set_data', $form_state['price_set_data'][$count], $context);
           }
         }
         else {
@@ -171,7 +171,7 @@ function civicrm_entity_price_set_field_display_form_event($form, &$form_state) 
       // Add a wrapper div that will be used by the Form API to update the form using AJAX
       $form['#prefix'] = '<div id="civicrm-price-set-field-event-registration">';
       $form['#suffix'] = '</div>';
-      $form['#attached']['js'][] = drupal_get_path('module', 'civicrm_entity_price_set_field') . '/js/civicrm_entity_price_set_field_display_form.js';
+      $form['#attached']['js'][] = backdrop_get_path('module', 'civicrm_entity_price_set_field') . '/js/civicrm_entity_price_set_field_display_form.js';
       // Depending on which step of the form we are on, we output different form fields
       switch ($form_state['step']) {
         // Registration Form
@@ -192,7 +192,7 @@ function civicrm_entity_price_set_field_display_form_event($form, &$form_state) 
             if ($contact) {
               $already_registered = _civicrm_entity_price_set_field_get_participant_count_for_event($event->id, $contact->id);
               if (empty($event->allow_same_participant_emails) && !empty($already_registered)) {
-                drupal_set_message(t('You have already registered for this event.'), 'status', FALSE);
+                backdrop_set_message(t('You have already registered for this event.'), 'status', FALSE);
                 $form_state['main_registrant_already_registered'] = TRUE;
               }
             }
@@ -640,8 +640,8 @@ function _civicrm_entity_price_set_field_setup_event_registration_form_fapi(&$fo
 
     // add some javascript to hide/reveal cc block depending on pay later click
     // add some css too
-    $form['#attached']['css'][] = drupal_get_path('module', 'civicrm_entity_price_set_field') . '/css/billing_block.css';
-    $form['#attached']['js'][] = drupal_get_path('module', 'civicrm_entity_price_set_field') . '/js/billing_block.js';
+    $form['#attached']['css'][] = backdrop_get_path('module', 'civicrm_entity_price_set_field') . '/css/billing_block.css';
+    $form['#attached']['js'][] = backdrop_get_path('module', 'civicrm_entity_price_set_field') . '/js/billing_block.js';
     // jquery validation of billing block?
   }
 
@@ -699,7 +699,7 @@ function civicrm_entity_price_set_field_display_form_event_submit($form, &$form_
             // should we check here if the contact is already registered, and if so throw back a message?
             $contact_registrations_for_event = _civicrm_entity_price_set_field_get_participant_count_for_event($event->id, $dedupe_result['id']);
             if (empty($event->allow_same_participant_emails) && $contact_registrations_for_event) {
-              drupal_set_message('Participant ' . ($count + 1) . ' has already registered for this event.');
+              backdrop_set_message('Participant ' . ($count + 1) . ' has already registered for this event.');
               $form_state['step'] = 1;
               $form_state['rebuild'] = TRUE;
               return;
@@ -773,7 +773,7 @@ function civicrm_entity_price_set_field_display_form_event_submit($form, &$form_
         $form_state['step']++;
       }
       else {
-        drupal_set_message(t('Error processing registration. Contact Site Administrator.'));
+        backdrop_set_message(t('Error processing registration. Contact Site Administrator.'));
         $form_state['step']--;
       }
       break;
@@ -908,7 +908,7 @@ function _civicrm_entity_price_set_field_process_event_registration(&$form_state
 
       }
     } catch (Exception $e) {
-      drupal_set_message(check_plain('Error creating participant record or financial records for registration for contact: ' . $form_state['contacts'][$count]->first_name . ' ' . $form_state['contacts'][$count]->last_name . '  -- ' . $e->getMessage()));
+      backdrop_set_message(check_plain('Error creating participant record or financial records for registration for contact: ' . $form_state['contacts'][$count]->first_name . ' ' . $form_state['contacts'][$count]->last_name . '  -- ' . $e->getMessage()));
     }
   }
 
@@ -1060,8 +1060,8 @@ function _civicrm_entity_price_set_field_event_registration_remove_participant_s
  */
 function civicrm_entity_price_set_field_event_registration_form_ajax_callback(&$form, &$form_state) {
   $commands = array();
-  drupal_alter('form', $form, $form_state, $form['#form_id']);
-  drupal_alter('form_' . $form['#form_id'], $form, $form_state);
+  backdrop_alter('form', $form, $form_state, $form['#form_id']);
+  backdrop_alter('form_' . $form['#form_id'], $form, $form_state);
   $commands[] = ajax_command_html('#civicrm-price-set-field-event-registration', render($form));
   $commands[] = ajax_command_prepend('#civicrm-price-set-field-event-registration', '<div id="messages">' . theme('status_messages') . '</div>');
   $commands[] = array(
@@ -1128,7 +1128,7 @@ function civicrm_entity_price_set_field_event_registration_form_register_as_anot
 
 
   $commands = array();
-  $to_render = drupal_rebuild_form($form['#form_id'], $form_state, $form);
+  $to_render = backdrop_rebuild_form($form['#form_id'], $form_state, $form);
   $commands[] = ajax_command_html('#civicrm-price-set-field-event-registration', render($to_render));
   $commands[] = ajax_command_prepend('#civicrm-price-set-field-event-registration', '<div id="messages">' . theme('status_messages') . '</div>');
   $commands[] = array(

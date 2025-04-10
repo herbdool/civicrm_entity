@@ -224,7 +224,7 @@ class CivicrmInlineEntityFormController extends EntityInlineEntityFormController
           }
 
         } // end if isset widget
-      } // end else not a drupal field
+      } // end else not a backdrop field
     } // end foreach
 
     return $entity_form;
@@ -261,7 +261,7 @@ class CivicrmInlineEntityFormController extends EntityInlineEntityFormController
 
       $entity = $entity_form['#entity'];
 
-      $child_form_state_values = drupal_array_get_nested_value($form_state['values'], $entity_form['#parents']);
+      $child_form_state_values = backdrop_array_get_nested_value($form_state['values'], $entity_form['#parents']);
       foreach ($child_form_state_values as $key => $value) {
         if (!is_array($value)) {
           $entity->{$key} = $value;
@@ -409,7 +409,7 @@ class CivicrmInlineEntityFormController extends EntityInlineEntityFormController
     elseif ($op == 'create' || $op == 'add') {
       $entity = $entity_form['#entity'];
 
-      $child_form_state_values = drupal_array_get_nested_value($form_state['values'], $entity_form['#parents']);
+      $child_form_state_values = backdrop_array_get_nested_value($form_state['values'], $entity_form['#parents']);
       $field_info = field_info_field($field_name);
       $field_target_id_column = !empty($field_info['settings']['target_id_column']) ? $field_info['settings']['target_id_column'] : '';
       $field_host_source_id = !empty($field_info['settings']['host_source_id']) ? $field_info['settings']['host_source_id'] : '';
@@ -448,7 +448,7 @@ class CivicrmInlineEntityFormController extends EntityInlineEntityFormController
           $parent_field_entity_type = $parent_field_info['settings']['target_entity_type'];
         }
         if(!empty($parent_field_parents) && !empty($parent_field_entity_type) && !empty($field_host_source_id) && !empty($field_target_id_column) ) {
-          $parent_submitted_values = drupal_array_get_nested_value($form_state['values'], $parent_field_parents);
+          $parent_submitted_values = backdrop_array_get_nested_value($form_state['values'], $parent_field_parents);
           if(empty($parent_submitted_values[$field_host_source_id])) {
             // save parent entity and update something?
             $parent_field_entity = new CivicrmEntity(array(), $parent_field_entity_type);
@@ -468,7 +468,7 @@ class CivicrmInlineEntityFormController extends EntityInlineEntityFormController
             //$entity->{$field_target_id_column} = $parent_field_wrapper->{$field_host_source_id}->value();
 
 
-            drupal_array_set_nested_value($form_state['values'], $parent_field_parents, $parent_submitted_values);
+            backdrop_array_set_nested_value($form_state['values'], $parent_field_parents, $parent_submitted_values);
             foreach($form_state['inline_entity_form'] as $iefid => $ief_data) {
               if($ief_data['instance']['field_name'] == $parent_field_name) {
                 $entity_count = count($form_state['inline_entity_form'][$iefid]['entities']);
@@ -490,7 +490,7 @@ class CivicrmInlineEntityFormController extends EntityInlineEntityFormController
 
       }
 
-      drupal_array_set_nested_value($form_state['values'], $entity_form['#parents'], $child_form_state_values);
+      backdrop_array_set_nested_value($form_state['values'], $entity_form['#parents'], $child_form_state_values);
 
     }
     // Add in created and changed times.

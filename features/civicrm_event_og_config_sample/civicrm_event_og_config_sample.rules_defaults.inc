@@ -36,7 +36,7 @@ function civicrm_event_og_config_sample_default_rules_configuration() {
           }
         },
         { "og_subcribe_user" : { "user" : [ "civicrm-user" ], "group" : [ "event-og:0" ] } },
-        { "drupal_message" : { "message" : "[civicrm-user:name] : [civicrm-user:uid] has been added to the OG for this Event [event-og:0:nid] event id is [civicrm-participant:event-id]\\r\\n\\r\\n" } }
+        { "backdrop_message" : { "message" : "[civicrm-user:name] : [civicrm-user:uid] has been added to the OG for this Event [event-og:0:nid] event id is [civicrm-participant:event-id]\\r\\n\\r\\n" } }
       ]
     }
   }');
