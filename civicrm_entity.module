@@ -2046,7 +2046,7 @@ function _civicrm_entity_available_entities() {
 function _civicrm_entity_enabled_entities() {
   $available_entities = _civicrm_entity_available_entities();
 
-  $selected_entities = config_get('civicrm_entity', 'admin_enabled_entities');
+  $selected_entities = config_get('civicrm_entity.settings', 'admin_enabled_entities');
 
   $enabled_entities = array();
   foreach ($available_entities as $entity_type => $api_entity) {
@@ -3073,15 +3073,15 @@ case 'nick.middlelast':
   }
 
   $params['roles'] = array(
-    DRUPAL_AUTHENTICATED_RID => 'authenticated user',
+    BACKDROP_AUTHENTICATED_ROLE => 'authenticated user',
   );
 
   // Set $config->inCiviCRM = TRUE to prevent creating a duplicate
-  // contact from user_save().
+  // contact from entity_create().
   $config = CRM_Core_Config::singleton();
   $config->inCiviCRM = TRUE;
 
-  $user_object = user_save('', $params);
+  $user_object = entity_create('user', $params);
 
   $config->inCiviCRM = FALSE;
 
@@ -3150,7 +3150,8 @@ function civicrm_entity_query($type, $property, $value, $limit) {
     $property => $value,
     'options' => array('limit' => $limit),
   ));
-  return array('entity_fetched' => array_values($return));
+  $entity_array = !empty($return) ? (array) $return: array();
+  return array('entity_fetched' => array_values($entity_array));
 }
 
 /**
@@ -3887,6 +3888,7 @@ function civicrm_entity_page_view($entity, $entity_type) {
   }
   elseif (!is_object($entity) && is_numeric($entity)) {
     $id = $entity;
+    $entity = entity_load($entity_type, $id);
   }
 
   if (!empty($entity) && is_object($entity)) {
@@ -3895,7 +3897,7 @@ function civicrm_entity_page_view($entity, $entity_type) {
       // as contact_is_deleted ...special handling to have the page value set properly
       $entity->is_deleted = $entity->contact_is_deleted;
     }
-    $content_array = entity_view($entity_type, array($entity->id => $entity));
+    $content_array = entity_view($entity);
     $content = backdrop_render($content_array);
     $label = entity_label($entity_type, $entity);
   }
@@ -3959,7 +3961,7 @@ function civicrm_entity_form_alter(&$form, &$form_state, $form_id) {
     $entities = _civicrm_entity_enabled_entities();
     $entity_type = $form['#entity_type'];
     if (array_key_exists($entity_type, $entities)) {
-      $entity_props = entity_get_property_info($entity_type);
+      $entity_props = entity_plus_get_property_info($entity_type);
       foreach ($entity_props['properties'] as $property => $info) {
         if (!empty($info['required'])) {
           $form['fields'][$property]['label']['#markup'] = '<span class="form-required" title="This field is required.">* </span>' . '<span title="This field is required.">' . $form['fields'][$property]['label']['#markup'] . '</span>';
@@ -4003,7 +4005,7 @@ function _civicrm_entity_manage_display_submit(&$form, &$form_state) {
 function _civicrm_entity_manage_display_suite_forms_validate(&$form, &$form_state) {
 
   $entity_type = $form['#entity_type'];
-  $entity_props = entity_get_property_info($entity_type);
+  $entity_props = entity_plus_get_property_info($entity_type);
 
   foreach ($entity_props['properties'] as $property => $info) {
     if (!empty($info['required']) && (empty($form_state['values']['fields'][$property]['region']) || $form_state['values']['fields'][$property]['region'] == 'hidden')) {

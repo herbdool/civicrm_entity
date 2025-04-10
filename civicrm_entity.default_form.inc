@@ -351,7 +351,7 @@ function civicrm_entity_form_validate(&$form, &$form_state) {
   }
 
   // validate civicrm data
-  $entity_metadata_info = entity_get_property_info($entity_type);
+  $entity_metadata_info = entity_plus_get_property_info($entity_type);
   foreach ($entity_metadata_info['properties'] as $name => $info) {
     if (!empty($info['type'])) {
       // integer validation
